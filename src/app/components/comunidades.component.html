@@ -1,0 +1,110 @@
+<div class="container">
+  <h1>🗺️ Comunidades Autónomas de España</h1>
+
+  <!-- Mensaje de carga -->
+  <div *ngIf="cargando" class="loading">
+    <div class="spinner"></div>
+    <p>Cargando datos...</p>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="error-message">
+    <p>⚠️ {{ error }}</p>
+    <button (click)="cargarDatos()">Reintentar</button>
+  </div>
+
+  <!-- Contenido principal -->
+  <div *ngIf="!cargando && !error" class="content">
+    <!-- Contenedor de listas -->
+    <div class="listas-container">
+      <!-- Lista 1: Comunidades Autónomas -->
+      <div class="lista-grupo">
+        <label for="ccaa">Comunidad Autónoma</label>
+        <select 
+          id="ccaa" 
+          [(ngModel)]="ccaaSeleccionada" 
+          (change)="onCCAAChange()"
+          class="select-box enabled">
+          <option value="">Selecciona una comunidad...</option>
+          <option *ngFor="let ccaa of todasCCAA" [value]="ccaa.code">
+            {{ ccaa.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Lista 2: Provincias -->
+      <div class="lista-grupo">
+        <label for="provincia">Provincia</label>
+        <select 
+          id="provincia" 
+          [(ngModel)]="provinciaSeleccionada" 
+          (change)="onProvinciaChange()"
+          [disabled]="!provinciaHabilitada"
+          [class.enabled]="provinciaHabilitada"
+          [class.disabled]="!provinciaHabilitada"
+          class="select-box">
+          <option value="">Selecciona una provincia...</option>
+          <option *ngFor="let provincia of provinciasFiltradas" [value]="provincia.code">
+            {{ provincia.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Lista 3: Poblaciones -->
+      <div class="lista-grupo">
+        <label for="poblacion">Población</label>
+        <select 
+          id="poblacion" 
+          [(ngModel)]="poblacionSeleccionada"
+          [disabled]="!poblacionHabilitada"
+          [class.enabled]="poblacionHabilitada"
+          [class.disabled]="!poblacionHabilitada"
+          class="select-box">
+          <option [value]="-1">Selecciona una población...</option>
+          <option *ngFor="let poblacion of poblacionesFiltradas; let i = index" [value]="i">
+            {{ poblacion.label }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Información detallada -->
+    <div class="detalles-container">
+      <h2>📋 Información Seleccionada</h2>
+
+      <!-- Detalles de CCAA -->
+      <div *ngIf="getCCAASeleccionadaInfo()" class="detalle-card">
+        <h3>Comunidad Autónoma</h3>
+        <div class="detalle-info">
+          <p><strong>Nombre:</strong> {{ getCCAASeleccionadaInfo()?.label }}</p>
+          <p><strong>Código:</strong> {{ getCCAASeleccionadaInfo()?.code }}</p>
+        </div>
+      </div>
+
+      <!-- Detalles de Provincia -->
+      <div *ngIf="getProvinciaSeleccionadaInfo()" class="detalle-card">
+        <h3>Provincia</h3>
+        <div class="detalle-info">
+          <p><strong>Nombre:</strong> {{ getProvinciaSeleccionadaInfo()?.label }}</p>
+          <p><strong>Código:</strong> {{ getProvinciaSeleccionadaInfo()?.code }}</p>
+          <p><strong>Pertenece a:</strong> {{ getCCAASeleccionadaInfo()?.label }}</p>
+        </div>
+      </div>
+
+      <!-- Detalles de Población -->
+      <div *ngIf="getPoblacionSeleccionadaInfo()" class="detalle-card">
+        <h3>Población</h3>
+        <div class="detalle-info">
+          <p><strong>Nombre:</strong> {{ getPoblacionSeleccionadaInfo()?.label }}</p>
+          <p><strong>Código:</strong> {{ getPoblacionSeleccionadaInfo()?.code }}</p>
+          <p><strong>Provincia:</strong> {{ getProvinciaSeleccionadaInfo()?.label }}</p>
+        </div>
+      </div>
+
+      <!-- Mensaje cuando no hay selección -->
+      <div *ngIf="!ccaaSeleccionada" class="sin-seleccion">
+        <p>👆 Selecciona una comunidad autónoma para comenzar</p>
+      </div>
+    </div>
+  </div>
+</div>
