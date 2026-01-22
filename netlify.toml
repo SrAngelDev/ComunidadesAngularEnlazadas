@@ -3,7 +3,7 @@
   command = "npm run build"
   
   # Directorio donde se publican los archivos construidos
-  publish = "dist/comunidades-angular-enlazadas/browser"
+  publish = "dist/ComunidadesAngularEnlazadas/browser"
 
 # Configuración para Single Page Application (SPA)
 # Redirige todas las rutas al index.html para que Angular maneje el routing
